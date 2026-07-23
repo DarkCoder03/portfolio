@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio — UI/UX Designer & AI Engineer crafting clean, database-backed, logic-driven products.">
+    <title>Anup - UI/UX Designer & AI Engineer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- Syne for the wide headers and Inter for clean body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Syne:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+
+    <style>
+        /* ====================
+           CORE VARIABLES (Consistent Colors)
+           ==================== */
+        :root {
+            --bg-color: #050505;
+            --surface: #111111;
+            --surface-hover: #161616;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.25);
+
+            /* Unified Primary Color */
+            --accent: #FF3246; 
+            --accent-rgb: 255, 50, 70;
+            --accent-glow: rgba(var(--accent-rgb), 0.45);
+
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.25s ease;
+
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 40px;
+        }
+
+        body.light-mode {
+            --bg-color: #f7f7f7;
+            --surface: #ffffff;
+            --surface-hover: #fcfcfc;
+            --text-primary: #0a0a0a;
+            --text-secondary: #555555;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --border-hover: rgba(0, 0, 0, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            padding: var(--space-lg) var(--space-md) 60px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        /* Red/Pink Circular Blurs - Minimal and Soft */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 400px; height: 400px;
+            right: -150px; top: -200px;
+            background: rgba(var(--accent-rgb), 0.10);
+            filter: blur(140px);
+            border-radius: 50%;
+            pointer-events: none; z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            width: 400px; height: 400px;
+            left: -200px; bottom: -150px;
+            background: rgba(var(--accent-rgb), 0.10);
+            filter: blur(140px);
+            border-radius: 50%;
+            pointer-events: none; z-index: 0;
+        }
+
+        body.light-mode::before, body.light-mode::after {
+            background: rgba(var(--accent-rgb), 0.15);
+            filter: blur(140px);
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+
+        .card, .timeline-item, .timeline-item > div, main.bento-grid > * { min-width: 0; }
+
+        /* ====================
+           TYPOGRAPHY
+           ==================== */
+        h1, h2, h3, .logo {
+            font-family: 'Syne', sans-serif;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        h2.section-title {
+            font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin: 100px 0 var(--space-lg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border-color);
+            scroll-margin-top: var(--space-lg);
+        }
+
+        .section-eyebrow {
+            display: block;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem; font-weight: 600;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: var(--space-xs);
+        }
+
+        h3 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 4px; }
+
+        .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem; font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        p {
+            color: var(--text-secondary);
+            font-size: 1.05rem; line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .grade {
+            font-weight: 600; color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin-bottom: var(--space-xs); display: inline-block;
+        }
+
+        /* ====================
+           NAVIGATION & TOGGLE
+           ==================== */
+        nav {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            gap: var(--space-sm);
+            
+            /* Pill Shape & Blur Effect */
+            position: sticky;
+            top: 24px;
+            z-index: 1000;
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+            margin-bottom: var(--space-lg);
+            
+            /* Dark Mode Glassmorphism */
+            background: rgba(17, 17, 17, 0.5); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Light mode adjustment for the navbar */
+        body.light-mode nav {
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
+        .logo .dot { color: var(--accent); }
+
+        .nav-links {
+            display: flex; gap: var(--space-md);
+            margin-left: auto; margin-right: var(--space-sm);
+        }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 0.95rem; font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        .nav-controls { display: flex; align-items: center; gap: var(--space-sm); }
+
+        .status {
+            background: var(--surface);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: 50px; font-size: 0.85rem; font-weight: 600;
+            display: flex; align-items: center; gap: 10px;
+            border: 1px solid var(--border-color); white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            background-color: #22c55e; border-radius: 50%; flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+            70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        .theme-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            width: 44px; height: 44px; border-radius: 50%;
+            display: grid; place-items: center; cursor: pointer;
+            transition: var(--transition); flex-shrink: 0;
+        }
+        .theme-toggle:hover { border-color: var(--border-hover); }
+        .theme-toggle svg {
+            width: 18px; height: 18px;
+            fill: none; stroke: currentColor;
+            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+        }
+        .light-icon { display: none; }
+        body.light-mode .dark-icon { display: none; }
+        body.light-mode .light-icon { display: block; }
+
+        a:focus-visible, button:focus-visible {
+            outline: 2px solid var(--accent); outline-offset: 3px;
+        }
+
+        /* ====================
+           HERO
+           ==================== */
+        .hero {
+            padding: clamp(24px, 5vw, 64px) 0 var(--space-lg);
+            text-align: left; /* Aligned left to match image */
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 1.2rem + 6.5vw, 6.5rem);
+            line-height: 0.98;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin: 0 0 var(--space-md);
+        }
+        
+        .hero h1 .italic-style {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .hero-lead {
+            font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
+            max-width: 52ch; margin: 0 0 var(--space-lg);
+            color: var(--text-secondary);
+        }
+        .hero-lead strong { color: var(--text-primary); font-weight: 600; }
+
+        .hero-actions {
+            display: flex; flex-wrap: wrap; gap: var(--space-sm);
+            justify-content: flex-start; align-items: center;
+        }
+
+        .btn {
+            background: var(--text-primary);
+            color: var(--bg-color) !important; text-decoration: none;
+            padding: 15px 32px; border-radius: 50px;
+            font-weight: 600; font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex; align-items: center; gap: 10px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .btn:hover { transform: translateY(-3px); opacity: 0.9; }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--border-hover);
+        }
+        .btn-outline:hover { border-color: var(--text-primary); }
+
+        /* Hero stat row */
+        .hero-stats {
+            display: flex; flex-wrap: wrap; justify-content: flex-start;
+            gap: clamp(24px, 6vw, 64px);
+            margin-top: var(--space-lg);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--border-color);
+        }
+        .hero-stat { text-align: left; }
+        .hero-stat .num {
+            font-size: clamp(1.8rem, 1.4rem + 1.5vw, 2.6rem);
+            font-weight: 800; line-height: 1; letter-spacing: -0.03em;
+            font-family: 'Syne', sans-serif;
+        }
+        .hero-stat .lbl {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-secondary); font-size: 0.9rem; margin-top: 6px;
+        }
+
+        /* ====================
+           MARQUEE (capabilities)
+           ==================== */
+        .marquee {
+            margin: var(--space-lg) 0;
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+        }
+        .marquee-track {
+            display: flex; width: max-content;
+            animation: scroll 28s linear infinite;
+        }
+        .marquee:hover .marquee-track { animation-play-state: paused; }
+        .marquee-track span {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.4rem, 1rem + 2vw, 2.4rem);
+            font-weight: 700; text-transform: uppercase;
+            color: var(--text-secondary);
+            padding: 0 var(--space-md);
+            white-space: nowrap;
+            display: inline-flex; align-items: center; gap: var(--space-md);
+        }
+        .marquee-track span::after {
+            content: '✦'; color: var(--accent); font-size: 0.7em;
+        }
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* ====================
+           BENTO GRID (work)
+           ==================== */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-sm);
+            grid-auto-rows: minmax(200px, auto);
+        }
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: var(--space-lg);
+            border: 1px solid var(--border-color);
+            display: flex; flex-direction: column;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            position: relative; overflow: hidden;
+        }
+        .card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+        .col-2 { grid-column: span 2; }
+        .row-2 { grid-row: span 2; }
+
+        .card-label {
+            margin-bottom: var(--space-sm);
+            font-size: 1.1rem; color: var(--text-secondary);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .project-tag {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: var(--accent); margin-bottom: var(--space-xs);
+        }
+        .project-desc { font-size: 1rem; }
+
+        .icon-link {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--text-primary); color: var(--bg-color);
+            display: grid; place-items: center;
+            text-decoration: none; font-size: 1.2rem;
+            margin-top: auto; align-self: flex-end;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .icon-link:hover {
+            background: var(--accent); color: #fff;
+            transform: scale(1.1) rotate(45deg);
+        }
+
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 20px; margin-top: auto; }
+        .tech-stack i {
+            font-size: 2.8rem; cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s ease;
+            filter: grayscale(100%) opacity(0.4);
+        }
+        .tech-stack i:hover {
+            filter: none; opacity: 1;
+            transform: translateY(-8px) scale(1.15);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        /* ====================
+           HOW I WORK (replaces services)
+           ==================== */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-sm);
+        }
+        .process-card {
+            background: linear-gradient(145deg, var(--surface), var(--surface-hover));
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: var(--space-lg);
+            transition: var(--transition);
+            position: relative; overflow: hidden;
+        }
+        .process-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+        }
+        .process-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem; font-weight: 700;
+            line-height: 1; letter-spacing: -0.03em;
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--border-hover);
+            margin-bottom: var(--space-md);
+        }
+        .process-card h3 { font-size: 1.25rem; }
+        .process-card p { font-size: 0.98rem; margin-top: 8px; }
+        .process-card:hover .process-num {
+            -webkit-text-stroke: 1.5px var(--accent);
+        }
+
+        /* ====================
+           VERTICAL TIMELINE
+           ==================== */
+        .timeline-container {
+            position: relative; display: flex; flex-direction: column;
+            gap: var(--space-md); padding-left: 40px;
+        }
+        .timeline-container::before {
+            content: ''; position: absolute;
+            left: 14px; top: 0; bottom: 0;
+            width: 2px; background: var(--border-color);
+        }
+        .timeline-item {
+            position: relative; display: grid;
+            grid-template-columns: 220px 1fr; gap: var(--space-md);
+            padding: 36px;
+            background: linear-gradient(145deg, var(--surface), var(--surface-hover));
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius); transition: var(--transition);
+        }
+        .timeline-item::before {
+            content: ''; position: absolute;
+            left: -35px; top: 34px;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: var(--accent); border: 4px solid var(--bg-color);
+            box-shadow: 0 0 18px var(--accent-glow);
+        }
+        .timeline-item:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+        }
+        .timeline-date {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--accent); font-weight: 700; font-size: 1.05rem;
+        }
+        .badge {
+            display: inline-block; font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem; font-weight: 600;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 50px; padding: 3px 10px;
+            margin-left: 6px; vertical-align: middle;
+        }
+        .timeline-meta {
+            font-size: 0.9rem; color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+            display: flex; align-items: center; gap: 6px;
+        }
+        .timeline-meta svg { flex-shrink: 0; }
+
+        .highlight-list {
+            list-style: none; margin-top: var(--space-sm);
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .highlight-list li {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-secondary); font-size: 0.98rem;
+            padding-left: 24px; position: relative; line-height: 1.5;
+        }
+        .highlight-list li::before {
+            content: ''; position: absolute;
+            left: 0; top: 8px;
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--accent);
+        }
+
+        /* ====================
+           CONTACT
+           ==================== */
+        .contact-card {
+            text-align: center;
+            background: linear-gradient(155deg, var(--surface), rgba(var(--accent-rgb), 0.08));
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: clamp(40px, 6vw, 72px) var(--space-lg);
+        }
+        body.light-mode .contact-card { background: linear-gradient(155deg, #fff, rgba(var(--accent-rgb), 0.05)); }
+
+        .contact-card h2 {
+            font-size: clamp(2rem, 1.4rem + 3vw, 3.25rem);
+            font-weight: 800; letter-spacing: -0.02em;
+            margin-bottom: var(--space-sm);
+        }
+        .contact-card h2 span {
+            background: linear-gradient(120deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .contact-card p { max-width: 48ch; margin: 0 auto var(--space-lg); }
+
+        .socials {
+            display: flex; justify-content: center; flex-wrap: wrap;
+            gap: var(--space-sm); margin-top: var(--space-lg);
+        }
+        .social-btn {
+            width: 52px; height: 52px; border-radius: 50%;
+            display: grid; place-items: center;
+            background: var(--surface); border: 1px solid var(--border-color);
+            color: var(--text-primary); text-decoration: none;
+            transition: var(--transition);
+        }
+        .social-btn svg { width: 22px; height: 22px; fill: currentColor; }
+        .social-btn:hover {
+            background: var(--accent); color: #fff;
+            transform: translateY(-4px); border-color: var(--accent);
+            box-shadow: 0 10px 24px var(--accent-glow);
+        }
+
+        footer {
+            text-align: center; margin-top: 60px;
+            color: var(--text-secondary);
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;
+        }
+
+        /* ====================
+           MEDIA QUERIES
+           ==================== */
+        @media (max-width: 900px) {
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .process-grid { grid-template-columns: 1fr; }
+            .timeline-item { grid-template-columns: 1fr; gap: var(--space-sm); padding: var(--space-md); }
+            .nav-links { display: none; }
+        }
+        @media (max-width: 600px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .col-2, .row-2 { grid-column: span 1; grid-row: span 1; }
+            .card { padding: var(--space-md); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- NAVBAR -->
+        <nav>
+            <div class="logo">Anup<span class="dot">.</span></div>
+            <div class="nav-links">
+                <a href="#work">Work</a>
+                <a href="#process">Process</a>
+                <a href="#experience">Experience</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="nav-controls">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark theme">
+                    <svg class="dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="light-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- HERO (Updated Typography to match image) -->
+        <header class="hero">
+            <h1>Designing<br><span class="italic-style">logic-driven</span><br>interfaces.</h1>
+            <p class="hero-lead">Hi, I'm <strong>Anup</strong> — a final-year AI & DS student who turns complex logic into clean products. I pair thoughtful Figma design with robust PostgreSQL back-ends.</p>
+            <div class="hero-actions">
+                <a href="#work" class="btn">View my work →</a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="hero-stat"><div class="num">3+</div><div class="lbl">Years designing</div></div>
+                <div class="hero-stat"><div class="num">10+</div><div class="lbl">Products shipped</div></div>
+            </div>
+        </header>
+
+        <!-- CAPABILITIES MARQUEE -->
+        <div class="marquee" aria-hidden="true">
+            <div class="marquee-track">
+                <span>UI Design</span><span>UX Research</span><span>Figma Prototyping</span><span>Design Systems</span><span>Responsive Layouts</span><span>Front-End</span><span>PostgreSQL</span><span>Python</span>
+                <!-- duplicate for seamless loop -->
+                <span>UI Design</span><span>UX Research</span><span>Figma Prototyping</span><span>Design Systems</span><span>Responsive Layouts</span><span>Front-End</span><span>PostgreSQL</span><span>Python</span>
+            </div>
+        </div>
+
+        <!-- WORK / BENTO GRID -->
+        <section id="work">
+            <h2 class="section-title">
+                <span class="section-eyebrow">Selected work</span>
+                Projects &amp; Stack
+            </h2>
+            <main class="bento-grid">
+
+                <div class="card col-2">
+                    <div class="project-tag">Full-stack · UI</div>
+                    <h3>DataHub UI</h3>
+                    <p class="project-desc">A full-stack data visualizer with a seamless, data-first user experience — designed in Figma, built for clarity at scale.</p>
+                    <a href="#" class="icon-link" aria-label="View DataHub UI project">↗</a>
+                </div>
+
+                <div class="card col-2">
+                    <div class="project-tag">API · Data</div>
+                    <h3>Hardware API</h3>
+                    <p class="project-desc">Mobile processor tracking &amp; benchmarking via Antutu, with a clean interface for comparing performance at a glance.</p>
+                    <a href="#" class="icon-link" aria-label="View Hardware API project">↗</a>
+                </div>
+
+                <div class="card col-2 row-2">
+                    <h3 class="card-label">Tech Stack</h3>
+                    <div class="tech-stack">
+                        <i class="devicon-figma-plain colored" title="Figma"></i>
+                        <i class="devicon-postgresql-plain colored" title="PostgreSQL"></i>
+                        <i class="devicon-cplusplus-plain colored" title="C++"></i>
+                        <i class="devicon-python-plain colored" title="Python"></i>
+                        <i class="devicon-linux-plain colored" title="Linux"></i>
+                        <i class="devicon-docker-plain colored" title="Docker"></i>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="project-tag">Concept</div>
+                    <h3>More soon</h3>
+                    <p class="project-desc">New case study in progress.</p>
+                    <a href="#" class="icon-link" aria-label="Coming soon">↗</a>
+                </div>
+
+                <div class="card">
+                    <div class="project-tag">Concept</div>
+                    <h3>More soon</h3>
+                    <p class="project-desc">New case study in progress.</p>
+                    <a href="#" class="icon-link" aria-label="Coming soon">↗</a>
+                </div>
+
+            </main>
+        </section>
+
+        <!-- HOW I WORK (replaces Services) -->
+        <section id="process">
+            <h2 class="section-title">
+                <span class="section-eyebrow">How I work</span>
+                My Process
+            </h2>
+            <div class="process-grid">
+                <div class="process-card">
+                    <div class="process-num">01</div>
+                    <h3>Understand</h3>
+                    <p>I start with the problem, not the pixels — mapping user needs and business goals into clear requirements before anything is designed.</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-num">02</div>
+                    <h3>Design</h3>
+                    <p>Wireframes evolve into polished, interactive Figma prototypes built on reusable component systems, so decisions are validated early.</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-num">03</div>
+                    <h3>Build &amp; Ship</h3>
+                    <p>I bring designs to life with responsive front-ends wired to solid PostgreSQL &amp; Python back-ends — design and engineering, end to end.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience">
+            <h2 class="section-title">
+                <span class="section-eyebrow">Where I've worked</span>
+                Experience
+            </h2>
+            <div class="timeline-container">
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Sep 2024 — Present</div>
+                    <div>
+                        <h3>Graphics Coordinator <span class="badge">Full-time</span></h3>
+                        <div class="subtitle">CTAE Coders Carousel</div>
+                        <div class="timeline-meta">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            Udaipur, Rajasthan, India · On-site
+                        </div>
+                        <p>Leading visual design initiatives for technical events. Collaborating directly with the core development team to create engaging UI mockups and promotional assets, ensuring brand consistency across all club platforms.</p>
+                        <ul class="highlight-list">
+                            <li>Built a unified visual identity across event branding and digital platforms.</li>
+                            <li>Delivered UI mockups that shaped the club's web presence.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Apr 2025 — Feb 2026</div>
+                    <div>
+                        <h3>Research Consultant <span class="badge">Part-time · Remote</span></h3>
+                        <div class="subtitle">WorldQuant</div>
+                        <p>Analyzed vast financial datasets to develop and backtest predictive alpha models. Leveraged data science methodologies to enhance quantitative research strategies and optimize algorithmic performance.</p>
+                        <ul class="highlight-list">
+                            <li>Designed and backtested predictive alpha models on large datasets.</li>
+                            <li>Applied data science methods to sharpen quantitative strategies.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Sep 2025 — Oct 2025</div>
+                    <div>
+                        <h3>UI Designer <span class="badge">Full-time · On-site</span></h3>
+                        <div class="subtitle">Modern Tech Creation</div>
+                        <p>Designed modern UI layouts, responsive interfaces and reusable component libraries, elevating the overall user experience across web applications.</p>
+                        <ul class="highlight-list">
+                            <li>Shipped responsive, accessible interfaces from concept to handoff.</li>
+                            <li>Created a reusable component system for faster, consistent builds.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- EDUCATION -->
+        <section id="education">
+            <h2 class="section-title">
+                <span class="section-eyebrow">My background</span>
+                Education
+            </h2>
+            <div class="timeline-container">
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Sep 2023 — Apr 2027</div>
+                    <div>
+                        <h3>College of Technology and Engineering</h3>
+                        <div class="subtitle">Bachelor of Technology - BTech, Artificial Intelligence</div>
+                        <span class="grade">Grade:A </span>
+                        <p>Core focus on machine learning algorithms, database management, and data structures. Actively building and deploying web applications to bridge theoretical concepts with real-world engineering.</p>
+                        <ul class="highlight-list">
+                            <li>Coursework: Machine Learning, DBMS, Data Structures &amp; Algorithms.</li>
+                            <li>Active member of the college coding &amp; design community.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Jun 2021 — Mar 2023</div>
+                    <div>
+                        <h3>Dharichhana Kunwari (D.K.) College, Dumraon</h3>
+                        <div class="subtitle">Intermediate</div>
+                        <span class="grade">Grade: A</span>
+                        <p>Specialized in Physics, Chemistry, and Mathematics. Built a rigorous foundation in logical reasoning and analytical problem-solving prior to pursuing engineering.</p>
+                        <ul class="highlight-list">
+                            <li>Focus stream: Physics, Chemistry &amp; Mathematics (PCM).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Apr 2013 — Mar 2021</div>
+                    <div>
+                        <h3>DAV Schools Network</h3>
+                        <div class="subtitle">Matriculation</div>
+                        <span class="grade">Grade: A</span>
+                        <p>Consistently maintained top academic standing. Participated in multiple science exhibitions and foundational programming workshops, igniting an early interest in technology.</p>
+                        <ul class="highlight-list">
+                            <li>Recognized for consistent top academic performance.</li>
+                            <li>Early exposure to programming through school workshops.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact">
+            <h2 class="section-title" style="border:none; margin-bottom: var(--space-lg);">
+                <span class="section-eyebrow">Get in touch</span>
+            </h2>
+            <div class="contact-card">
+                <h2>Let's build something <span>impactful.</span></h2>
+                <p>Open to UI/UX design roles, internships and freelance projects. Have an idea or a role in mind? I'd love to hear about it.</p>
+                <a href="mailto:hello@example.com" class="btn">Say hello →</a>
+
+                <div class="socials">
+                    <a href="https://www.linkedin.com/in/your-username" target="_blank" rel="noopener" class="social-btn" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.02 8h4.96v14H.02V8zM8.98 8h4.75v1.9h.07c.66-1.2 2.28-2.47 4.7-2.47 5.03 0 5.96 3.3 5.96 7.6V22h-4.96v-6.3c0-1.5-.03-3.44-2.1-3.44-2.1 0-2.42 1.64-2.42 3.33V22H8.98V8z"/></svg>
+                    </a>
+                    <a href="https://github.com/your-username" target="_blank" rel="noopener" class="social-btn" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.96 0-1.32.47-2.39 1.24-3.23-.13-.3-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.23 0 4.63-2.81 5.65-5.49 5.95.43.37.82 1.1.82 2.22v3.29c0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                    </a>
+                    <a href="https://dribbble.com/your-username" target="_blank" rel="noopener" class="social-btn" aria-label="Dribbble">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm7.93 5.53a10.06 10.06 0 0 1 2.28 6.29c-.33-.07-3.63-.74-6.95-.32-.07-.17-.14-.35-.22-.53-.2-.48-.43-.97-.66-1.44 3.68-1.5 5.35-3.66 5.55-4zM12 1.8c2.6 0 4.98.98 6.78 2.58-.17.24-1.67 2.26-5.22 3.59a52.6 52.6 0 0 0-3.76-5.87A10.3 10.3 0 0 1 12 1.8zM7.86 2.8a62.4 62.4 0 0 1 3.72 5.8c-4.7 1.25-8.85 1.23-9.3 1.22A10.24 10.24 0 0 1 7.86 2.8zM1.8 12v-.32c.43.01 5.31.07 10.33-1.44.29.56.56 1.13.81 1.7l-.4.12C7.4 13.71 4.6 18.4 4.36 18.8A10.16 10.16 0 0 1 1.8 12zm10.2 10.2c-2.36 0-4.53-.8-6.26-2.15.18-.38 2.3-4.46 8.13-6.49l.07-.02a42.6 42.6 0 0 1 2.2 7.82 10.15 10.15 0 0 1-4.14.84zm5.9-1.8a44.3 44.3 0 0 0-2-7.53c3.13-.5 5.87.32 6.21.43a10.21 10.21 0 0 1-4.2 7.1z"/></svg>
+                    </a>
+                    <a href="https://www.behance.net/your-username" target="_blank" rel="noopener" class="social-btn" aria-label="Behance">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.2 6.6c.6 0 1.16.05 1.66.16.5.1.92.28 1.28.52.35.24.62.57.82.98.19.4.28.9.28 1.5 0 .64-.13 1.19-.37 1.65-.25.47-.58.85-1 1.14-.42.3-.9.5-1.44.65-.54.13-1.1.2-1.66.2H0V6.6h8.2zM7.7 11.3c.5 0 .9-.12 1.22-.36.32-.24.47-.62.47-1.15 0-.3-.05-.53-.16-.72a1.15 1.15 0 0 0-.44-.44 1.8 1.8 0 0 0-.62-.22 4 4 0 0 0-.73-.06H3.3v2.95h4.4zm.24 4.96c.28 0 .55-.03.8-.08.25-.06.47-.15.66-.28.18-.13.33-.3.44-.53.1-.22.16-.5.16-.85 0-.67-.19-1.15-.56-1.44-.38-.28-.88-.42-1.5-.42H3.3v3.6h4.64zM16.9 16.15c.35.34.86.51 1.53.51.48 0 .89-.12 1.24-.36.34-.24.55-.5.63-.76h2.32c-.37 1.15-.94 1.97-1.7 2.47-.77.5-1.69.75-2.78.75-.76 0-1.44-.12-2.05-.36a4.3 4.3 0 0 1-1.55-1.03 4.55 4.55 0 0 1-.98-1.6 5.9 5.9 0 0 1-.34-2.05c0-.73.12-1.4.35-2.02a4.7 4.7 0 0 1 2.55-2.66 5.1 5.1 0 0 1 2.02-.39c.83 0 1.55.16 2.17.48.62.32 1.12.75 1.52 1.29.4.54.68 1.15.85 1.84.17.69.23 1.4.18 2.16h-6.65c0 .77.26 1.4.61 1.74zM19.6 11.1c-.28-.3-.72-.47-1.32-.47-.4 0-.72.07-.98.2-.26.14-.47.3-.63.5-.16.2-.27.4-.33.63-.06.22-.1.42-.11.6h4.12c-.06-.65-.28-1.14-.57-1.46zM15.15 7.66h5.16V6.4h-5.16v1.26z"/></svg>
+                    </a>
+                    <a href="https://x.com/your-username" target="_blank" rel="noopener" class="social-btn" aria-label="X (Twitter)">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.6l5.24 6.93 6.06-6.93zm-1.3 19.5h2.04L6.5 3.24H4.31L17.6 20.65z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <footer>© <span id="year"></span> Anup — Designed &amp; built with care.</footer>
+
+    </div>
+
+    <script>
+        (function () {
+            const toggleBtn = document.getElementById('themeToggle');
+            const body = document.body;
+            const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+            const savedTheme = localStorage.getItem('theme');
+
+            if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
+                body.classList.add('light-mode');
+            }
+            toggleBtn.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+            });
+            document.getElementById('year').textContent = new Date().getFullYear();
+        })();
+    </script>
+</body>
+</html>
